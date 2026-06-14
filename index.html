@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Submit a Deal</title>
+  <title>Добавить акцию</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,7 +37,10 @@
       margin-bottom: 6px;
     }
 
-    input, textarea {
+    input[type="text"],
+    input[type="date"],
+    textarea,
+    select {
       display: block;
       width: 100%;
       padding: 12px 14px;
@@ -51,11 +54,17 @@
       transition: border-color 0.15s;
     }
 
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+
     input::placeholder, textarea::placeholder {
       color: var(--tg-theme-hint-color, #c7c7cc);
     }
 
-    input:focus, textarea:focus {
+    input:focus, textarea:focus, select:focus {
       border-color: var(--tg-theme-button-color, #2481cc);
     }
 
@@ -63,6 +72,11 @@
       min-height: 90px;
       resize: vertical;
       line-height: 1.4;
+    }
+
+    input[type="date"]:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
     }
 
     .field-meta {
@@ -83,7 +97,8 @@
     }
 
     .field.invalid input,
-    .field.invalid textarea {
+    .field.invalid textarea,
+    .field.invalid select {
       border-color: #ff3b30;
     }
 
@@ -105,54 +120,96 @@
       letter-spacing: 0.5px;
       margin-bottom: 14px;
     }
+
+    .checkbox-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--tg-theme-text-color, #000);
+    }
+
+    .checkbox-wrap input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    #category-custom {
+      margin-top: 8px;
+    }
   </style>
 </head>
 <body>
-  <h1>Submit a Deal</h1>
+  <h1>Добавить акцию</h1>
 
-  <div class="section-title">Store Info</div>
+  <div class="section-title">Магазин</div>
 
   <div class="field" id="f-store">
-    <label>Store / Brand</label>
-    <input id="store" type="text" placeholder="e.g. Amazon, Nike, AliExpress" maxlength="100" autocomplete="off">
+    <label>Магазин / Бренд</label>
+    <input id="store" type="text" placeholder="Напр.: Amazon, Nike, AliExpress" maxlength="100" autocomplete="off">
     <div class="field-meta">
-      <span class="error-msg">Please enter the store name</span>
+      <span class="error-msg">Укажите название магазина</span>
     </div>
   </div>
 
   <div class="field" id="f-discount">
-    <label>Discount / Coupon Code</label>
-    <input id="discount" type="text" placeholder="e.g. 30% off · Code: SAVE30 · Buy 1 Get 1" maxlength="200" autocomplete="off">
+    <label>Скидка / Промокод</label>
+    <input id="discount" type="text" placeholder="Напр.: скидка 30% · Код: SAVE30 · 2 по цене 1" maxlength="200" autocomplete="off">
     <div class="field-meta">
-      <span class="error-msg">Please enter the discount or coupon code</span>
+      <span class="error-msg">Укажите скидку или промокод</span>
     </div>
   </div>
 
   <div class="divider"></div>
-  <div class="section-title">Deal Details</div>
+  <div class="section-title">О товаре</div>
 
   <div class="field" id="f-category">
-    <label>Category / Product</label>
-    <input id="category" type="text" placeholder="e.g. Electronics, Shoes, All items" maxlength="100" autocomplete="off">
+    <label>Категория</label>
+    <select id="category">
+      <option value="">Выберите категорию...</option>
+      <option value="Электроника">Электроника</option>
+      <option value="Одежда и обувь">Одежда и обувь</option>
+      <option value="Продукты питания">Продукты питания</option>
+      <option value="Красота и здоровье">Красота и здоровье</option>
+      <option value="Дом и сад">Дом и сад</option>
+      <option value="Спорт и отдых">Спорт и отдых</option>
+      <option value="Путешествия">Путешествия</option>
+      <option value="Развлечения">Развлечения</option>
+      <option value="Услуги">Услуги</option>
+      <option value="__other__">Другое</option>
+    </select>
+    <input id="category-custom" type="text" placeholder="Введите свою категорию" maxlength="100" autocomplete="off" style="display:none;">
     <div class="field-meta">
-      <span class="error-msg">Please enter a category or product</span>
+      <span class="error-msg">Выберите или укажите категорию</span>
     </div>
   </div>
 
   <div class="field" id="f-description">
-    <label>Short Description</label>
-    <textarea id="description" placeholder="Describe the deal briefly — what it includes, any conditions, etc." maxlength="300"></textarea>
+    <label>Описание</label>
+    <textarea id="description" placeholder="Кратко опишите акцию — что включает, условия и т.д." maxlength="300"></textarea>
     <div class="field-meta">
-      <span class="error-msg">Please add a description</span>
+      <span class="error-msg">Добавьте описание</span>
       <span class="hint" id="desc-counter">0 / 300</span>
     </div>
   </div>
 
+  <div class="divider"></div>
+  <div class="section-title">Срок действия</div>
+
   <div class="field" id="f-expiry">
-    <label>Expiry Date</label>
-    <input id="expiry" type="text" placeholder="e.g. 2026-06-30 · Limited time · No expiry" maxlength="50" autocomplete="off">
+    <label>Дата окончания</label>
+    <input id="expiry" type="date">
+    <label class="checkbox-wrap" style="text-transform:none; letter-spacing:0; margin-top:10px;">
+      <input type="checkbox" id="no-expiry">
+      Без срока действия
+    </label>
     <div class="field-meta">
-      <span class="error-msg">Please enter an expiry date or "No expiry"</span>
+      <span class="error-msg">Укажите дату или отметьте «Без срока»</span>
     </div>
   </div>
 
@@ -161,16 +218,52 @@
     tg.ready();
     tg.expand();
 
+    document.getElementById('expiry').min = new Date().toISOString().split('T')[0];
+
     const descEl = document.getElementById('description');
     descEl.addEventListener('input', () => {
       document.getElementById('desc-counter').textContent = `${descEl.value.length} / 300`;
     });
 
-    const FIELDS = ['store', 'discount', 'category', 'description', 'expiry'];
+    const categorySelect = document.getElementById('category');
+    const categoryCustom = document.getElementById('category-custom');
+    categorySelect.addEventListener('change', () => {
+      const isOther = categorySelect.value === '__other__';
+      categoryCustom.style.display = isOther ? 'block' : 'none';
+      if (!isOther) categoryCustom.value = '';
+      document.getElementById('f-category').classList.remove('invalid');
+    });
+
+    const noExpiryCheck = document.getElementById('no-expiry');
+    const expiryInput = document.getElementById('expiry');
+    noExpiryCheck.addEventListener('change', () => {
+      expiryInput.disabled = noExpiryCheck.checked;
+      if (noExpiryCheck.checked) expiryInput.value = '';
+      document.getElementById('f-expiry').classList.remove('invalid');
+    });
+
+    function getCategory() {
+      const val = categorySelect.value;
+      if (val === '__other__') return categoryCustom.value.trim();
+      return val;
+    }
+
+    function getExpiry() {
+      if (noExpiryCheck.checked) return 'Без срока';
+      return expiryInput.value;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const [y, m, d] = dateStr.split('-');
+      return `${d}.${m}.${y}`;
+    }
 
     function validate() {
       let ok = true;
-      FIELDS.forEach(id => {
+
+      const simpleFields = ['store', 'discount', 'description'];
+      simpleFields.forEach(id => {
         const el = document.getElementById(id);
         const wrapper = document.getElementById('f-' + id);
         if (!el.value.trim()) {
@@ -180,10 +273,27 @@
           wrapper.classList.remove('invalid');
         }
       });
+
+      const catWrapper = document.getElementById('f-category');
+      if (!getCategory()) {
+        catWrapper.classList.add('invalid');
+        ok = false;
+      } else {
+        catWrapper.classList.remove('invalid');
+      }
+
+      const expWrapper = document.getElementById('f-expiry');
+      if (!getExpiry()) {
+        expWrapper.classList.add('invalid');
+        ok = false;
+      } else {
+        expWrapper.classList.remove('invalid');
+      }
+
       return ok;
     }
 
-    tg.MainButton.setParams({ text: 'Submit Deal', color: tg.themeParams.button_color || '#2481cc' });
+    tg.MainButton.setParams({ text: 'Отправить акцию', color: tg.themeParams.button_color || '#2481cc' });
     tg.MainButton.show();
 
     tg.MainButton.onClick(() => {
@@ -192,19 +302,19 @@
         return;
       }
       tg.MainButton.showProgress(true);
+      const expiryRaw = getExpiry();
       const payload = {
         store:       document.getElementById('store').value.trim(),
         discount:    document.getElementById('discount').value.trim(),
-        category:    document.getElementById('category').value.trim(),
+        category:    getCategory(),
         description: document.getElementById('description').value.trim(),
-        expiry:      document.getElementById('expiry').value.trim(),
+        expiry:      expiryRaw === 'Без срока' ? 'Без срока' : formatDate(expiryRaw),
       };
       tg.HapticFeedback.notificationOccurred('success');
       tg.sendData(JSON.stringify(payload));
     });
 
-    // clear invalid state on input
-    FIELDS.forEach(id => {
+    ['store', 'discount', 'description'].forEach(id => {
       document.getElementById(id).addEventListener('input', () => {
         document.getElementById('f-' + id).classList.remove('invalid');
       });
