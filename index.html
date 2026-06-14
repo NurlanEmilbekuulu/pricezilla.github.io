@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Submit a Deal</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--tg-theme-bg-color, #ffffff);
+      color: var(--tg-theme-text-color, #000000);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 16px 16px 80px;
+      font-size: 15px;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--tg-theme-text-color, #000);
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--tg-theme-hint-color, #8e8e93);
+      margin-bottom: 6px;
+    }
+
+    input, textarea {
+      display: block;
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1.5px solid transparent;
+      background: var(--tg-theme-secondary-bg-color, #f2f2f7);
+      color: var(--tg-theme-text-color, #000);
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: var(--tg-theme-hint-color, #c7c7cc);
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--tg-theme-button-color, #2481cc);
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+      line-height: 1.4;
+    }
+
+    .field-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--tg-theme-hint-color, #8e8e93);
+    }
+
+    .error-msg {
+      font-size: 12px;
+      color: #ff3b30;
+      display: none;
+    }
+
+    .field.invalid input,
+    .field.invalid textarea {
+      border-color: #ff3b30;
+    }
+
+    .field.invalid .error-msg {
+      display: block;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--tg-theme-secondary-bg-color, #f2f2f7);
+      margin: 20px 0;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--tg-theme-hint-color, #8e8e93);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Submit a Deal</h1>
+
+  <div class="section-title">Store Info</div>
+
+  <div class="field" id="f-store">
+    <label>Store / Brand</label>
+    <input id="store" type="text" placeholder="e.g. Amazon, Nike, AliExpress" maxlength="100" autocomplete="off">
+    <div class="field-meta">
+      <span class="error-msg">Please enter the store name</span>
+    </div>
+  </div>
+
+  <div class="field" id="f-discount">
+    <label>Discount / Coupon Code</label>
+    <input id="discount" type="text" placeholder="e.g. 30% off · Code: SAVE30 · Buy 1 Get 1" maxlength="200" autocomplete="off">
+    <div class="field-meta">
+      <span class="error-msg">Please enter the discount or coupon code</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-title">Deal Details</div>
+
+  <div class="field" id="f-category">
+    <label>Category / Product</label>
+    <input id="category" type="text" placeholder="e.g. Electronics, Shoes, All items" maxlength="100" autocomplete="off">
+    <div class="field-meta">
+      <span class="error-msg">Please enter a category or product</span>
+    </div>
+  </div>
+
+  <div class="field" id="f-description">
+    <label>Short Description</label>
+    <textarea id="description" placeholder="Describe the deal briefly — what it includes, any conditions, etc." maxlength="300"></textarea>
+    <div class="field-meta">
+      <span class="error-msg">Please add a description</span>
+      <span class="hint" id="desc-counter">0 / 300</span>
+    </div>
+  </div>
+
+  <div class="field" id="f-expiry">
+    <label>Expiry Date</label>
+    <input id="expiry" type="text" placeholder="e.g. 2026-06-30 · Limited time · No expiry" maxlength="50" autocomplete="off">
+    <div class="field-meta">
+      <span class="error-msg">Please enter an expiry date or "No expiry"</span>
+    </div>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    const descEl = document.getElementById('description');
+    descEl.addEventListener('input', () => {
+      document.getElementById('desc-counter').textContent = `${descEl.value.length} / 300`;
+    });
+
+    const FIELDS = ['store', 'discount', 'category', 'description', 'expiry'];
+
+    function validate() {
+      let ok = true;
+      FIELDS.forEach(id => {
+        const el = document.getElementById(id);
+        const wrapper = document.getElementById('f-' + id);
+        if (!el.value.trim()) {
+          wrapper.classList.add('invalid');
+          ok = false;
+        } else {
+          wrapper.classList.remove('invalid');
+        }
+      });
+      return ok;
+    }
+
+    tg.MainButton.setParams({ text: 'Submit Deal', color: tg.themeParams.button_color || '#2481cc' });
+    tg.MainButton.show();
+
+    tg.MainButton.onClick(() => {
+      if (!validate()) {
+        tg.HapticFeedback.notificationOccurred('error');
+        return;
+      }
+      tg.MainButton.showProgress(true);
+      const payload = {
+        store:       document.getElementById('store').value.trim(),
+        discount:    document.getElementById('discount').value.trim(),
+        category:    document.getElementById('category').value.trim(),
+        description: document.getElementById('description').value.trim(),
+        expiry:      document.getElementById('expiry').value.trim(),
+      };
+      tg.HapticFeedback.notificationOccurred('success');
+      tg.sendData(JSON.stringify(payload));
+    });
+
+    // clear invalid state on input
+    FIELDS.forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        document.getElementById('f-' + id).classList.remove('invalid');
+      });
+    });
+  </script>
+</body>
+</html>
