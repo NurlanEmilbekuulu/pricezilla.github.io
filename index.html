@@ -12,7 +12,7 @@
       background: var(--tg-theme-bg-color, #ffffff);
       color: var(--tg-theme-text-color, #000000);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      padding: 16px 16px 80px;
+      padding: 16px 16px 100px;
       font-size: 15px;
     }
 
@@ -23,9 +23,62 @@
       color: var(--tg-theme-text-color, #000);
     }
 
-    .field {
-      margin-bottom: 16px;
+    /* ── Section headers ── */
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--tg-theme-hint-color, #8e8e93);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
     }
+
+    .divider {
+      height: 1px;
+      background: var(--tg-theme-secondary-bg-color, #f2f2f7);
+      margin: 20px 0;
+    }
+
+    /* ── Source cards ── */
+    .source-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .source-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 8px;
+      border-radius: 14px;
+      border: 2px solid transparent;
+      background: var(--tg-theme-secondary-bg-color, #f2f2f7);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+
+    .source-card .icon { font-size: 24px; }
+    .source-card .label {
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      color: var(--tg-theme-text-color, #000);
+      line-height: 1.3;
+    }
+
+    .source-card.selected {
+      border-color: var(--tg-theme-button-color, #2481cc);
+      background: var(--tg-theme-button-color, #2481cc)1a;
+    }
+
+    #f-source.invalid .source-cards { outline: 2px solid #ff3b30; border-radius: 14px; }
+
+    /* ── Form fields ── */
+    .field { margin-bottom: 16px; }
 
     label {
       display: block;
@@ -38,9 +91,9 @@
     }
 
     input[type="text"],
+    input[type="url"],
     input[type="date"],
-    textarea,
-    select {
+    textarea {
       display: block;
       width: 100%;
       padding: 12px 14px;
@@ -54,17 +107,11 @@
       transition: border-color 0.15s;
     }
 
-    select {
-      appearance: none;
-      -webkit-appearance: none;
-      cursor: pointer;
-    }
-
     input::placeholder, textarea::placeholder {
       color: var(--tg-theme-hint-color, #c7c7cc);
     }
 
-    input:focus, textarea:focus, select:focus {
+    input:focus, textarea:focus {
       border-color: var(--tg-theme-button-color, #2481cc);
     }
 
@@ -74,10 +121,7 @@
       line-height: 1.4;
     }
 
-    input[type="date"]:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
+    input[type="date"]:disabled { opacity: 0.4; cursor: not-allowed; }
 
     .field-meta {
       display: flex;
@@ -85,10 +129,7 @@
       margin-top: 5px;
     }
 
-    .hint {
-      font-size: 12px;
-      color: var(--tg-theme-hint-color, #8e8e93);
-    }
+    .hint { font-size: 12px; color: var(--tg-theme-hint-color, #8e8e93); }
 
     .error-msg {
       font-size: 12px;
@@ -97,29 +138,50 @@
     }
 
     .field.invalid input,
-    .field.invalid textarea,
-    .field.invalid select {
+    .field.invalid textarea {
       border-color: #ff3b30;
     }
 
-    .field.invalid .error-msg {
-      display: block;
+    .field.invalid .error-msg { display: block; }
+
+    /* ── Chips ── */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    .divider {
-      height: 1px;
+    .chip {
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--tg-theme-secondary-bg-color, #e5e5ea);
       background: var(--tg-theme-secondary-bg-color, #f2f2f7);
-      margin: 20px 0;
+      color: var(--tg-theme-text-color, #000);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+      white-space: nowrap;
     }
 
-    .section-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--tg-theme-hint-color, #8e8e93);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 14px;
+    .chip.selected {
+      border-color: var(--tg-theme-button-color, #2481cc);
+      background: var(--tg-theme-button-color, #2481cc)1a;
+      color: var(--tg-theme-button-color, #2481cc);
     }
+
+    .field.invalid .chips .chip:not(.selected) {
+      border-color: #ff3b30;
+    }
+
+    #discount-value-wrap { margin-top: 10px; }
+
+    /* ── Category custom ── */
+    #category-custom { margin-top: 8px; }
+
+    /* ── Expiry ── */
+    .expiry-chips { margin-bottom: 10px; }
 
     .checkbox-wrap {
       display: flex;
@@ -132,36 +194,108 @@
     }
 
     .checkbox-wrap input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      margin: 0;
-      cursor: pointer;
-      flex-shrink: 0;
+      width: 18px; height: 18px;
+      margin: 0; cursor: pointer; flex-shrink: 0;
     }
 
-    #category-custom {
-      margin-top: 8px;
+    /* ── Preview card ── */
+    #preview-section { display: none; }
+
+    .preview-card {
+      background: var(--tg-theme-secondary-bg-color, #f2f2f7);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .preview-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--tg-theme-hint-color, #8e8e93);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
     }
   </style>
 </head>
 <body>
   <h1>Добавить акцию</h1>
 
-  <div class="section-title">Магазин</div>
+  <!-- ── Source type ── -->
+  <div class="section-title">Источник акции</div>
+  <div id="f-source">
+    <div class="source-cards">
+      <div class="source-card" data-source="store">
+        <span class="icon">🏪</span>
+        <span class="label">Магазин / офлайн</span>
+      </div>
+      <div class="source-card" data-source="ecommerce">
+        <span class="icon">🛒</span>
+        <span class="label">Интернет-магазин</span>
+      </div>
+      <div class="source-card" data-source="instagram">
+        <span class="icon">📸</span>
+        <span class="label">Instagram</span>
+      </div>
+    </div>
+    <div class="field-meta" style="margin-top:6px;">
+      <span class="error-msg" id="source-error" style="display:none;">Выберите источник акции</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-title" id="store-section-title">Магазин</div>
 
   <div class="field" id="f-store">
-    <label>Магазин / Бренд</label>
+    <label id="store-label">Магазин / Бренд</label>
     <input id="store" type="text" placeholder="Напр.: Amazon, Nike, AliExpress" maxlength="100" autocomplete="off">
     <div class="field-meta">
       <span class="error-msg">Укажите название магазина</span>
     </div>
   </div>
 
-  <div class="field" id="f-discount">
-    <label>Скидка / Промокод</label>
-    <input id="discount" type="text" placeholder="Напр.: скидка 30% · Код: SAVE30 · 2 по цене 1" maxlength="200" autocomplete="off">
+  <!-- Location (store only) -->
+  <div class="field" id="f-location" style="display:none;">
+    <label>Город / адрес</label>
+    <input id="location" type="text" placeholder="Напр.: Алматы, ул. Абая 10" maxlength="150" autocomplete="off">
     <div class="field-meta">
-      <span class="error-msg">Укажите скидку или промокод</span>
+      <span class="error-msg">Укажите город или адрес</span>
+    </div>
+  </div>
+
+  <!-- URL (ecommerce / instagram) -->
+  <div class="field" id="f-url" style="display:none;">
+    <label id="url-label">Ссылка на товар</label>
+    <input id="url" type="url" placeholder="https://..." maxlength="500" autocomplete="off">
+    <div class="field-meta">
+      <span class="error-msg">Укажите ссылку</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-title">Скидка</div>
+
+  <div class="field" id="f-discount-type">
+    <label>Тип скидки</label>
+    <div class="chips" id="discount-type-chips">
+      <span class="chip" data-dtype="percent">% Скидка</span>
+      <span class="chip" data-dtype="promo">Промокод</span>
+      <span class="chip" data-dtype="bogo">2 по цене 1</span>
+      <span class="chip" data-dtype="fixed">Фикс. цена</span>
+    </div>
+    <div class="field-meta" style="margin-top:6px;">
+      <span class="error-msg">Выберите тип скидки</span>
+    </div>
+  </div>
+
+  <div class="field" id="f-discount" style="display:none;">
+    <label id="discount-label">Значение</label>
+    <input id="discount" type="text" placeholder="" maxlength="100" autocomplete="off">
+    <div class="field-meta">
+      <span class="error-msg">Укажите значение скидки</span>
     </div>
   </div>
 
@@ -170,21 +304,20 @@
 
   <div class="field" id="f-category">
     <label>Категория</label>
-    <select id="category">
-      <option value="">Выберите категорию...</option>
-      <option value="Электроника">Электроника</option>
-      <option value="Одежда и обувь">Одежда и обувь</option>
-      <option value="Продукты питания">Продукты питания</option>
-      <option value="Красота и здоровье">Красота и здоровье</option>
-      <option value="Дом и сад">Дом и сад</option>
-      <option value="Спорт и отдых">Спорт и отдых</option>
-      <option value="Путешествия">Путешествия</option>
-      <option value="Развлечения">Развлечения</option>
-      <option value="Услуги">Услуги</option>
-      <option value="__other__">Другое</option>
-    </select>
-    <input id="category-custom" type="text" placeholder="Введите свою категорию" maxlength="100" autocomplete="off" style="display:none;">
-    <div class="field-meta">
+    <div class="chips" id="category-chips">
+      <span class="chip" data-cat="Электроника">Электроника</span>
+      <span class="chip" data-cat="Одежда и обувь">Одежда</span>
+      <span class="chip" data-cat="Продукты питания">Продукты</span>
+      <span class="chip" data-cat="Красота и здоровье">Красота</span>
+      <span class="chip" data-cat="Дом и сад">Дом</span>
+      <span class="chip" data-cat="Спорт и отдых">Спорт</span>
+      <span class="chip" data-cat="Путешествия">Путешествия</span>
+      <span class="chip" data-cat="Развлечения">Развлечения</span>
+      <span class="chip" data-cat="Услуги">Услуги</span>
+      <span class="chip" data-cat="__other__">Другое</span>
+    </div>
+    <input id="category-custom" type="text" placeholder="Введите свою категорию" maxlength="100" autocomplete="off" style="display:none; margin-top:8px;">
+    <div class="field-meta" style="margin-top:6px;">
       <span class="error-msg">Выберите или укажите категорию</span>
     </div>
   </div>
@@ -202,15 +335,23 @@
   <div class="section-title">Срок действия</div>
 
   <div class="field" id="f-expiry">
-    <label>Дата окончания</label>
-    <input id="expiry" type="date">
-    <label class="checkbox-wrap" style="text-transform:none; letter-spacing:0; margin-top:10px;">
-      <input type="checkbox" id="no-expiry">
-      Без срока действия
-    </label>
-    <div class="field-meta">
-      <span class="error-msg">Укажите дату или отметьте «Без срока»</span>
+    <div class="chips expiry-chips" id="expiry-chips">
+      <span class="chip" data-expiry="7d">+7 дней</span>
+      <span class="chip" data-expiry="month">До конца месяца</span>
+      <span class="chip" data-expiry="none">Без срока</span>
     </div>
+    <label style="margin-top:10px;">Или выберите дату</label>
+    <input id="expiry" type="date">
+    <div class="field-meta" style="margin-top:6px;">
+      <span class="error-msg">Укажите дату или срок действия</span>
+    </div>
+  </div>
+
+  <!-- ── Live preview ── -->
+  <div id="preview-section">
+    <div class="divider"></div>
+    <div class="preview-label">Предпросмотр</div>
+    <div class="preview-card" id="preview-card"></div>
   </div>
 
   <script>
@@ -218,38 +359,161 @@
     tg.ready();
     tg.expand();
 
-    document.getElementById('expiry').min = new Date().toISOString().split('T')[0];
+    // ── State ──
+    let sourceType = '';
+    let discountType = '';
+    let selectedCategory = '';
 
+    // ── Source cards ──
+    document.querySelectorAll('.source-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.source-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        sourceType = card.dataset.source;
+        document.getElementById('source-error').style.display = 'none';
+        updateSourceFields();
+        updatePreview();
+      });
+    });
+
+    function updateSourceFields() {
+      const locWrap = document.getElementById('f-location');
+      const urlWrap = document.getElementById('f-url');
+      const storeLabel = document.getElementById('store-label');
+      const urlLabel = document.getElementById('url-label');
+      const storeSectionTitle = document.getElementById('store-section-title');
+
+      locWrap.style.display = sourceType === 'store' ? 'block' : 'none';
+      urlWrap.style.display = (sourceType === 'ecommerce' || sourceType === 'instagram') ? 'block' : 'none';
+
+      if (sourceType === 'instagram') {
+        storeLabel.textContent = 'Аккаунт / Блогер';
+        storeSectionTitle.textContent = 'Аккаунт';
+        urlLabel.textContent = 'Ссылка на пост или профиль';
+        document.getElementById('store').placeholder = 'Напр.: @fashionblog';
+        document.getElementById('url').placeholder = 'https://instagram.com/p/...';
+      } else if (sourceType === 'ecommerce') {
+        storeLabel.textContent = 'Магазин / Бренд';
+        storeSectionTitle.textContent = 'Магазин';
+        urlLabel.textContent = 'Ссылка на товар';
+        document.getElementById('store').placeholder = 'Напр.: Wildberries, Ozon';
+        document.getElementById('url').placeholder = 'https://...';
+      } else {
+        storeLabel.textContent = 'Магазин / Бренд';
+        storeSectionTitle.textContent = 'Магазин';
+        document.getElementById('store').placeholder = 'Напр.: Magnum, Мечта';
+      }
+    }
+
+    // ── Discount type chips ──
+    const dtypePlaceholders = {
+      percent: 'Напр.: 30',
+      promo: 'Напр.: SAVE30',
+      bogo: 'Напр.: при покупке 2 товаров',
+      fixed: 'Напр.: 990',
+    };
+    const dtypeLabels = {
+      percent: 'Процент скидки (%)',
+      promo: 'Промокод',
+      bogo: 'Условие акции',
+      fixed: 'Цена (₽)',
+    };
+
+    document.querySelectorAll('#discount-type-chips .chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('#discount-type-chips .chip').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        discountType = chip.dataset.dtype;
+        document.getElementById('f-discount-type').classList.remove('invalid');
+
+        const discountField = document.getElementById('f-discount');
+        discountField.style.display = 'block';
+        document.getElementById('discount-label').textContent = dtypeLabels[discountType];
+        document.getElementById('discount').placeholder = dtypePlaceholders[discountType];
+        updatePreview();
+      });
+    });
+
+    // ── Category chips ──
+    document.querySelectorAll('#category-chips .chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('#category-chips .chip').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        selectedCategory = chip.dataset.cat;
+        document.getElementById('f-category').classList.remove('invalid');
+
+        const custom = document.getElementById('category-custom');
+        if (selectedCategory === '__other__') {
+          custom.style.display = 'block';
+          custom.focus();
+        } else {
+          custom.style.display = 'none';
+          custom.value = '';
+        }
+        updatePreview();
+      });
+    });
+
+    document.getElementById('category-custom').addEventListener('input', updatePreview);
+
+    // ── Expiry chips ──
+    const today = new Date();
+    document.getElementById('expiry').min = today.toISOString().split('T')[0];
+
+    document.querySelectorAll('#expiry-chips .chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('#expiry-chips .chip').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        document.getElementById('f-expiry').classList.remove('invalid');
+
+        const expiryInput = document.getElementById('expiry');
+        if (chip.dataset.expiry === 'none') {
+          expiryInput.value = '';
+          expiryInput.disabled = true;
+        } else if (chip.dataset.expiry === '7d') {
+          const d = new Date(); d.setDate(d.getDate() + 7);
+          expiryInput.value = d.toISOString().split('T')[0];
+          expiryInput.disabled = false;
+        } else if (chip.dataset.expiry === 'month') {
+          const d = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+          expiryInput.value = d.toISOString().split('T')[0];
+          expiryInput.disabled = false;
+        }
+        updatePreview();
+      });
+    });
+
+    document.getElementById('expiry').addEventListener('change', () => {
+      document.querySelectorAll('#expiry-chips .chip').forEach(c => c.classList.remove('selected'));
+      document.getElementById('f-expiry').classList.remove('invalid');
+      updatePreview();
+    });
+
+    // ── Description counter ──
     const descEl = document.getElementById('description');
     descEl.addEventListener('input', () => {
       document.getElementById('desc-counter').textContent = `${descEl.value.length} / 300`;
+      updatePreview();
     });
 
-    const categorySelect = document.getElementById('category');
-    const categoryCustom = document.getElementById('category-custom');
-    categorySelect.addEventListener('change', () => {
-      const isOther = categorySelect.value === '__other__';
-      categoryCustom.style.display = isOther ? 'block' : 'none';
-      if (!isOther) categoryCustom.value = '';
-      document.getElementById('f-category').classList.remove('invalid');
+    ['store', 'discount', 'url', 'location'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', () => {
+        document.getElementById('f-' + id)?.classList.remove('invalid');
+        updatePreview();
+      });
     });
 
-    const noExpiryCheck = document.getElementById('no-expiry');
-    const expiryInput = document.getElementById('expiry');
-    noExpiryCheck.addEventListener('change', () => {
-      expiryInput.disabled = noExpiryCheck.checked;
-      if (noExpiryCheck.checked) expiryInput.value = '';
-      document.getElementById('f-expiry').classList.remove('invalid');
-    });
-
+    // ── Helpers ──
     function getCategory() {
-      const val = categorySelect.value;
-      if (val === '__other__') return categoryCustom.value.trim();
-      return val;
+      if (selectedCategory === '__other__') return document.getElementById('category-custom').value.trim();
+      return selectedCategory;
     }
 
     function getExpiry() {
-      if (noExpiryCheck.checked) return 'Без срока';
+      const expiryInput = document.getElementById('expiry');
+      const noneChip = document.querySelector('#expiry-chips .chip[data-expiry="none"]');
+      if (noneChip && noneChip.classList.contains('selected')) return 'Без срока';
       return expiryInput.value;
     }
 
@@ -259,40 +523,92 @@
       return `${d}.${m}.${y}`;
     }
 
+    function buildDiscountLine() {
+      const val = document.getElementById('discount').value.trim();
+      if (!val) return '';
+      if (discountType === 'percent') return `Скидка ${val}%`;
+      if (discountType === 'promo') return `Промокод: ${val}`;
+      if (discountType === 'bogo') return `Акция: ${val}`;
+      if (discountType === 'fixed') return `Цена: ${val} ₽`;
+      return val;
+    }
+
+    // ── Live preview ──
+    const sourceEmoji = { store: '🏪', ecommerce: '🛒', instagram: '📸' };
+    const sourceTags = { store: '#офлайн', ecommerce: '#онлайн', instagram: '#instagram' };
+
+    function updatePreview() {
+      const store = document.getElementById('store').value.trim();
+      const discountLine = buildDiscountLine();
+      const category = getCategory();
+      const description = descEl.value.trim();
+      const expiryRaw = getExpiry();
+      const expiry = expiryRaw === 'Без срока' ? 'Без срока' : formatDate(expiryRaw);
+      const url = document.getElementById('url').value.trim();
+      const location = document.getElementById('location').value.trim();
+
+      if (!store && !discountLine && !category && !description) {
+        document.getElementById('preview-section').style.display = 'none';
+        return;
+      }
+
+      const emoji = sourceEmoji[sourceType] || '🏷';
+      const srcTag = sourceTags[sourceType] || '';
+      const storeTag = store ? `#${store.replace(/\s+/g, '').toLowerCase()}` : '';
+
+      let lines = [];
+      if (store) lines.push(`${emoji} <b>${store}</b>\n`);
+      if (discountLine) lines.push(`${discountLine}\n`);
+      if (category) lines.push(`Категория: ${category}`);
+      if (description) lines.push(description);
+      if (expiry) lines.push(`\nСрок: ${expiry}`);
+      if (url) lines.push(`🔗 ${url}`);
+      if (location) lines.push(`📍 ${location}`);
+      if (storeTag || srcTag) lines.push(`\n#акция ${storeTag} ${srcTag}`.trim());
+
+      document.getElementById('preview-section').style.display = 'block';
+      document.getElementById('preview-card').innerHTML = lines.join('\n');
+    }
+
+    // ── Validation ──
     function validate() {
       let ok = true;
+      let firstInvalid = null;
 
-      const simpleFields = ['store', 'discount', 'description'];
-      simpleFields.forEach(id => {
+      function markInvalid(id) {
         const el = document.getElementById(id);
-        const wrapper = document.getElementById('f-' + id);
-        if (!el.value.trim()) {
-          wrapper.classList.add('invalid');
-          ok = false;
-        } else {
-          wrapper.classList.remove('invalid');
-        }
-      });
-
-      const catWrapper = document.getElementById('f-category');
-      if (!getCategory()) {
-        catWrapper.classList.add('invalid');
+        el.classList.add('invalid');
+        if (!firstInvalid) firstInvalid = el;
         ok = false;
-      } else {
-        catWrapper.classList.remove('invalid');
       }
 
-      const expWrapper = document.getElementById('f-expiry');
-      if (!getExpiry()) {
-        expWrapper.classList.add('invalid');
+      if (!sourceType) {
+        document.getElementById('source-error').style.display = 'block';
+        if (!firstInvalid) firstInvalid = document.getElementById('f-source');
         ok = false;
-      } else {
-        expWrapper.classList.remove('invalid');
       }
 
+      if (!document.getElementById('store').value.trim()) markInvalid('f-store');
+
+      if (sourceType === 'store' && !document.getElementById('location').value.trim()) {
+        markInvalid('f-location');
+      }
+      if ((sourceType === 'ecommerce' || sourceType === 'instagram') && !document.getElementById('url').value.trim()) {
+        markInvalid('f-url');
+      }
+
+      if (!discountType) markInvalid('f-discount-type');
+      if (discountType && !document.getElementById('discount').value.trim()) markInvalid('f-discount');
+
+      if (!getCategory()) markInvalid('f-category');
+      if (!descEl.value.trim()) markInvalid('f-description');
+      if (!getExpiry()) markInvalid('f-expiry');
+
+      if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return ok;
     }
 
+    // ── Submit ──
     tg.MainButton.setParams({ text: 'Отправить акцию', color: tg.themeParams.button_color || '#2481cc' });
     tg.MainButton.show();
 
@@ -302,22 +618,22 @@
         return;
       }
       tg.MainButton.showProgress(true);
+
       const expiryRaw = getExpiry();
       const payload = {
-        store:       document.getElementById('store').value.trim(),
-        discount:    document.getElementById('discount').value.trim(),
-        category:    getCategory(),
-        description: document.getElementById('description').value.trim(),
-        expiry:      expiryRaw === 'Без срока' ? 'Без срока' : formatDate(expiryRaw),
+        source_type:   sourceType,
+        store:         document.getElementById('store').value.trim(),
+        discount_type: discountType,
+        discount:      document.getElementById('discount').value.trim(),
+        category:      getCategory(),
+        description:   descEl.value.trim(),
+        expiry:        expiryRaw === 'Без срока' ? 'Без срока' : formatDate(expiryRaw),
+        url:           document.getElementById('url').value.trim() || '',
+        location:      document.getElementById('location').value.trim() || '',
       };
+
       tg.HapticFeedback.notificationOccurred('success');
       tg.sendData(JSON.stringify(payload));
-    });
-
-    ['store', 'discount', 'description'].forEach(id => {
-      document.getElementById(id).addEventListener('input', () => {
-        document.getElementById('f-' + id).classList.remove('invalid');
-      });
     });
   </script>
 </body>
